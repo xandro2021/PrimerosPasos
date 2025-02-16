@@ -1,15 +1,16 @@
-package graficos.video60;
+package graficos.video61;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.SystemColor;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class PruebaDibujo {
+public class TrabajandoColores {
   public static void start() {
 
     MarcoConDibujos mimarco = new MarcoConDibujos();
@@ -23,11 +24,12 @@ class MarcoConDibujos extends JFrame {
 
   public MarcoConDibujos() {
 
-    setTitle("video59 Prueba de Dibujo");
+    setTitle("video61 TrabajandoColores");
     setSize(400, 400);
 
     LaminaConFiguras milamina = new LaminaConFiguras();
     add(milamina);
+    milamina.setBackground(SystemColor.window);
 
   }
 }
@@ -40,25 +42,16 @@ class LaminaConFiguras extends JPanel {
 
     Graphics2D g2 = (Graphics2D) g;
     Rectangle2D rectangulo = new Rectangle2D.Double(100, 100, 200, 150);
+    g2.setPaint(Color.RED);
+    g2.fill(rectangulo);
 
+    g2.setPaint(Color.BLACK);
     g2.draw(rectangulo);
 
     Ellipse2D elipse = new Ellipse2D.Double();
     elipse.setFrame(rectangulo);
-
-    g2.draw(elipse);
-
-    g2.draw(new Line2D.Double(100, 100, 300, 250));
-
-    /* Sacar un punto medio en la figura */
-    double CentroenX = rectangulo.getCenterX();
-    double CentroenY = rectangulo.getCenterY();
-    double radio = 150;
-
-    Ellipse2D circulo = new Ellipse2D.Double();
-
-    circulo.setFrameFromCenter(CentroenX, CentroenY, CentroenX + radio, CentroenY + radio);
-    g2.draw(circulo);
+    g2.setPaint(new Color(109, 172, 59).brighter());
+    g2.fill(elipse);
 
   }
 
