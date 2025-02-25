@@ -1,10 +1,10 @@
-import graficos.video80.VariosOyentes;
+import graficos.video86.PruebaTexto;
 
 public class run
 {
   public static void main(String[] args) {
 
-    VariosOyentes.start();
+    PruebaTexto.start();
 
   }
 }
