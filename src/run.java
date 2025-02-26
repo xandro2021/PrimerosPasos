@@ -1,10 +1,10 @@
-import graficos.video86.PruebaTexto;
+import graficos.video91.AreaTextoII;
 
 public class run
 {
   public static void main(String[] args) {
 
-    PruebaTexto.start();
+    AreaTextoII.start();
 
   }
 }
