@@ -1,10 +1,10 @@
-import graficos.video96.EJSLider;
+import graficos.video98.JSpinerI;
 
 public class run
 {
   public static void main(String[] args) {
 
-    EJSLider.start();
+    JSpinerI.start();
 
   }
 }
