@@ -8,12 +8,12 @@ echo "Ingresa el nombre completo de la clase principal (por ejemplo, 'com.miapp.
 read CLASE_PRINCIPAL
 clear
 
-# Ejecutar el programa
+# Ejecutar el programa con opciones de renderización de fuentes y escalabilidad
 echo "Ejecutando '$CLASE_PRINCIPAL' desde '$BIN_DIR'..."
 echo "***************************************************"
 echo "***************************************************"
 echo "                                                   "
-java -cp "$BIN_DIR" "$CLASE_PRINCIPAL"
+java -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.uiScale=1 -cp "$BIN_DIR" "$CLASE_PRINCIPAL"
 
 echo "                                                   "
 echo "***************************************************"
