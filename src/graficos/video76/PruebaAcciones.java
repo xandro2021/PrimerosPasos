@@ -19,19 +19,16 @@ public class PruebaAcciones {
   public static void start() {
     JFrame marco = new marcoAcciones();
     marco.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    marco.setVisible(true);
   }
 }
 
 class marcoAcciones extends JFrame {
 
   public marcoAcciones() {
-
-    setSize(650, 450);
+    setBounds(300, 240, 350, 250);
     setTitle("video76 PruebaAcciones Eventos varios");
-
     add(new laminaAcciones());
-
-    setVisible(true);
   }
 
 }
