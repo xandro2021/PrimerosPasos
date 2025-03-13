@@ -1,10 +1,10 @@
-import graficos.video119.DisposicionLibreII;
+import graficos.video123.Aplicacion_Dialogos;
 
 public class Main
 {
   public static void main(String[] args) {
 
-    DisposicionLibreII.start();
+    Aplicacion_Dialogos.start();
 
   }
 }
