@@ -40,27 +40,32 @@ class Lamina extends JPanel {
 
     try {
 
-      imagen = ImageIO.read(new File("src/graficos/video63/ball.png"));
+      imagen = ImageIO.read(new File("src/graficos/video63/ballx.png"));
 
     } catch (IOException e) {
-      System.out.println("Error " + e.getMessage());
-      e.printStackTrace();
+      System.out.println("Mi Error, imagen no encontrada");
+      // System.out.println("Error " + e.getMessage());
+      // e.printStackTrace();
     }
 
   }
 
   @Override
-  protected void paintComponent(Graphics arg0) {
+  protected void paintComponent(Graphics g) {
 
-    super.paintComponent(arg0);
+    super.paintComponent(g);
 
-    arg0.drawImage(imagen, 0, 0, null);
-
-    crearMosaico(arg0);
+    if (imagen != null) {
+      g.drawImage(imagen, 0, 0, null);
+      crearMosaico(g);
+    }
+    else {
+      g.drawString("No se pudo cargar la imagen", 20, 20);
+    }
 
   }
 
-  private void crearMosaico(Graphics arg0) {
+  private void crearMosaico(Graphics g) {
 
     int ancho_imagen = imagen.getWidth(this);
     int alto_imagen = imagen.getHeight(this);
@@ -68,7 +73,7 @@ class Lamina extends JPanel {
     for (int i = 0; i < 1920; i += ancho_imagen) {
       for (int j = 0; j < 1080; j += alto_imagen) {
 
-        arg0.copyArea(0, 0, ancho_imagen, alto_imagen, i, j);
+        g.copyArea(0, 0, ancho_imagen, alto_imagen, i, j);
 
       }
     }
