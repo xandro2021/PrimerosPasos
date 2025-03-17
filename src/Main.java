@@ -1,10 +1,10 @@
-import graficos.video63.PruebaImagenes;
+import graficos.video144.ExcepcionesI;
 
 public class Main
 {
   public static void main(String[] args) {
 
-    PruebaImagenes.start();
+    ExcepcionesI.start();
 
   }
 }
