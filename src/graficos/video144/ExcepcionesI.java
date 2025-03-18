@@ -36,6 +36,7 @@ public class ExcepcionesI {
 
       System.out.println("ERROR PERSONALIZADO");
       System.out.println(e.getMessage());
+      System.out.println(e.getClass().getName());
 
     }
 
