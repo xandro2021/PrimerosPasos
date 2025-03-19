@@ -34,6 +34,7 @@ class LeerFichero {
 
       } while (linea != null);
 
+      mibuffer.close();
       entrada.close();
 
     } catch (FileNotFoundException e) {

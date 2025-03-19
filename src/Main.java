@@ -1,10 +1,10 @@
-import FlujosArchivos.video154.LeerArchivoBuffer;
+import FlujosArchivos.video154.EscribirArchivo2;
 
 public class Main
 {
   public static void main(String[] args) {
 
-    LeerArchivoBuffer.start();
+    EscribirArchivo2.start();
 
   }
 }

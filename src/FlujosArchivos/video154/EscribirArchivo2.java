@@ -1,5 +1,6 @@
 package FlujosArchivos.video154;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -17,15 +18,20 @@ class Escribiendo {
 
     try {
 
-      /* Se usa el boolean para actualizar el archivo en vez de volver a
-       * crearlo, en caso de que el archivo ya existiera */
+      /*
+       * Se usa el boolean para actualizar el archivo en vez de volver a
+       * crearlo, en caso de que el archivo ya existiera
+       */
       FileWriter escritura = new FileWriter("src/recursos/archivoEscritoDesdeJava.txt", true);
+      BufferedWriter mibuffer = new BufferedWriter(escritura);
 
-      for (int i = 0; i<frase.length(); i++) {
-        escritura.write(frase.charAt(i));
+      for (int i = 0; i < 10; i++) {
+        mibuffer.write(frase);
+        mibuffer.newLine();
+        mibuffer.flush();
       }
 
-      escritura.write("\n");
+      mibuffer.close();
       escritura.close();
 
     } catch (IOException e) {
