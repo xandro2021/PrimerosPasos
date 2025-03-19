@@ -1,10 +1,10 @@
-import graficos.video150.DebugJava;
+import FlujosArchivos.video152.Acceso_Fichero;
 
 public class Main
 {
   public static void main(String[] args) {
 
-    DebugJava.start();
+    Acceso_Fichero.start();
 
   }
 }
