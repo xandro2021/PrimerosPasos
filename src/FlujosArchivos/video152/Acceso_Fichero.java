@@ -18,10 +18,10 @@ class LeerFichero {
 
       FileReader entrada = new FileReader("src/recursos/leerArchivo.txt");
 
-      int c = entrada.read();
+      int c;
 
       /* Leerlo hasta el EOF */
-      while (c != -1) {
+      do {
 
         /* Leer codigos unicode */
         c = entrada.read();
@@ -29,7 +29,7 @@ class LeerFichero {
         char letra = (char) c;
         System.out.print(letra);
 
-      }
+      } while (c != -1);
 
       entrada.close();
 

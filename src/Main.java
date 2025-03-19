@@ -1,10 +1,10 @@
-import FlujosArchivos.video152.Acceso_Fichero;
+import FlujosArchivos.video153.EscribirArchivo;
 
 public class Main
 {
   public static void main(String[] args) {
 
-    Acceso_Fichero.start();
+    EscribirArchivo.start();
 
   }
 }
