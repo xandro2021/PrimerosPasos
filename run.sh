@@ -6,13 +6,13 @@ BIN_DIR="bin"
 PROGRAM_NAME="Main"
 
 # Verificar la existencia del archivo Main.java
-if [! -f "$SRC_DIR/$PROGRAM_NAME.java" ]; then
+if [ ! -f "$SRC_DIR/$PROGRAM_NAME.java" ]; then
   echo "Error: no se encontró el archivo $PROGRAM_NAME.java en $SRC_DIR"
   exit 1
 fi
 
 # Crear el directorio bin si no existe
-if [! -d "$BIN_DIR" ]; then
+if [ ! -d "$BIN_DIR" ]; then
   mkdir -p "$BIN_DIR"
   echo "Directorio '$BIN_DIR' creado."
 fi
