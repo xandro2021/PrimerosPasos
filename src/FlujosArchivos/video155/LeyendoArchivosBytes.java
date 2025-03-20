@@ -1,9 +1,11 @@
 package FlujosArchivos.video155;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class LeyendoArchivosBytes {
+
   public static void start() {
 
     int datos_entrada[] = new int[29834];
@@ -39,5 +41,29 @@ public class LeyendoArchivosBytes {
       e.printStackTrace();
     }
 
+    creaFichero(datos_entrada);
+
   }
+
+  private static void creaFichero(int[] datos_nuevo_fichero) {
+
+    try {
+
+      FileOutputStream fichero_nuevo = new FileOutputStream("src/recursos/archivosBytes/imagenCopia.jpg");
+
+      for (int i = 0; i < datos_nuevo_fichero.length; i++) {
+        fichero_nuevo.write(datos_nuevo_fichero[i]);
+      }
+
+      fichero_nuevo.close();
+
+      System.out.println("Se creado la copia del archivo!");
+
+    } catch (IOException e) {
+      System.out.println("Error " + e.getMessage());
+      e.printStackTrace();
+    }
+
+  }
+
 }
