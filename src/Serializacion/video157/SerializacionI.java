@@ -27,7 +27,8 @@ public class SerializacionI {
       /*
        * Guardar objeto serializado en un archivo .dat
        */
-      ObjectOutputStream escribiendo_fichero = new ObjectOutputStream(new FileOutputStream("src/recursos/archivosBytes/empleado.dat", true));
+      ObjectOutputStream escribiendo_fichero = new ObjectOutputStream(
+          new FileOutputStream("src/recursos/archivosBytes/empleado.dat", true));
 
       escribiendo_fichero.writeObject(personal);
 
@@ -36,7 +37,8 @@ public class SerializacionI {
       /*
        * Leer el archivo serializado e imprimir su valor restaurado
        */
-      ObjectInputStream recuperando_fichero = new ObjectInputStream(new FileInputStream("src/recursos/archivosBytes/empleado.dat"));
+      ObjectInputStream recuperando_fichero = new ObjectInputStream(
+          new FileInputStream("src/recursos/archivosBytes/empleado.dat"));
 
       Empleado[] empleados_recuperados = (Empleado[]) recuperando_fichero.readObject();
 
@@ -62,6 +64,8 @@ class Empleado implements Serializable {
   private String nombre;
   private double sueldo;
   private Date fechaContrato;
+
+  private static final long serialVersionUID = 1L;
 
   public Empleado(String n, double s, int agno, int mes, int dia) {
 
@@ -97,6 +101,8 @@ class Empleado implements Serializable {
 }
 
 class Administrador extends Empleado {
+
+  private static final long serialVersionUID = 1L;
 
   public Administrador(String n, double s, int agno, int mes, int dia) {
     super(n, s, agno, mes, dia);
