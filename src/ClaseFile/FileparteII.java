@@ -37,12 +37,12 @@ class Creando {
     /*
      * Eliminar el archivo
      */
-    if(JOptionPane.showConfirmDialog(null, "Deseas eliminar el archivo?", "Confirmacion", 0)==0){
+    if (JOptionPane.showConfirmDialog(null, "Deseas eliminar el archivo?", "Confirmacion", 0) == 0) {
       ruta_nuevo_archivo.delete();
       System.out.println("Archivo eliminado con exito");
     }
 
-    if(JOptionPane.showConfirmDialog(null, "Deseas eliminar el directorio vacio?", "Confirmacion", 0)==0){
+    if (JOptionPane.showConfirmDialog(null, "Deseas eliminar el directorio vacio?", "Confirmacion", 0) == 0) {
       ruta.delete();
       System.out.println("directorio eliminado con exito");
     }
