@@ -41,7 +41,7 @@ class FileEjemploII {
 
     StringBuilder indentacion = new StringBuilder();
 
-    for (int i = 0; i<num_identacion; i++) {
+    for (int i = 0; i < num_identacion; i++) {
       indentacion.append("    ");
     }
 
