@@ -1,10 +1,10 @@
-import ProgramacionGenerica.video165.clases_propias.UsoPareja;
+import ProgramacionGenerica.video166.MetodosGenericos;
 
 public class Main
 {
   public static void main(String[] args) {
 
-    UsoPareja.start();
+    MetodosGenericos.start();
 
   }
 }
