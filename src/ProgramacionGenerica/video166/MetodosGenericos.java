@@ -31,7 +31,7 @@ public class MetodosGenericos {
      * implementacion como Comparable<Calendar> lo cual tiene conflicto con
      * la parameterizacion del metodo generico creado <T extends Comparable<T>>
      */
-    Calendar fechaMenor = MisMatrices.getElementoMenor(fechas);
+    GregorianCalendar fechaMenor = (GregorianCalendar) MisMatrices.getElementoMenor(fechas);
 
     if (fechaMenor != null) {
       SimpleDateFormat formato = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());

@@ -1,10 +1,10 @@
-import ProgramacionGenerica.video166.MetodosGenericos;
+import ProgramacionGenerica.video167.HerenciaGenericos;
 
 public class Main
 {
   public static void main(String[] args) {
 
-    MetodosGenericos.start();
+    HerenciaGenericos.start();
 
   }
 }
