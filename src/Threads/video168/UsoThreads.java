@@ -96,6 +96,16 @@ class MarcoRebote extends JFrame {
   private void BD_South() {
     JPanel lamina_botones = new JPanel();
 
+    ponerBoton(lamina_botones, "Start!", e -> comienzaJuego());
+    ponerBoton(lamina_botones, "Exit", e -> System.exit(0));
+
+    add(lamina_botones, BorderLayout.SOUTH);
+  }
+
+  /* Version Compleja para aprender sobre el paso de funciones como argumento */
+  private void BD_South_unUsed() {
+    JPanel lamina_botones = new JPanel();
+
     @FunctionalInterface
     interface FuncionGenerica {
       void miFuncion();
