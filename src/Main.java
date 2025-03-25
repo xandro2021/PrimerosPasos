@@ -1,10 +1,10 @@
-import ProgramacionGenerica.video167.HerenciaGenericos;
+import Threads.video168.UsoThreads;
 
 public class Main
 {
   public static void main(String[] args) {
 
-    HerenciaGenericos.start();
+    UsoThreads.start();
 
   }
 }
