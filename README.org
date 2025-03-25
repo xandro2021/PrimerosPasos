@@ -1,0 +1,343 @@
+#+title: Notas de Interes
+
+* Funcion como Parametro de otra funcion
+** Interfaces funcionales y expresiones lambda
+Una interfaz funcional es una interfaz que tiene un solo método abstracto. Puedes implementar esta interfaz usando una expresión lambda, lo que te permite pasar una función como argumento de otra función de manera más elegante y concisa.
+Un ejemplo básico usando la interfaz funcional Runnable (que ya existía antes de Java 8 pero se ajusta perfectamente al concepto de interfaces funcionales):
+#+begin_src java
+// Usando una clase anónima (antes de Java 8)
+new Thread(new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("Hola desde un hilo");
+    }
+}).start();
+
+// Con expresión lambda (Java 8 en adelante)
+new Thread(() -> System.out.println("Hola desde un hilo")).start();
+#+end_src
+
+** Interfaces funcionales personalizadas
+*** Ejemplo basico - funcion de una sola linea
+Puedes definir tus propias interfaces funcionales para pasar funciones como argumentos. Por ejemplo:
+#+begin_src java
+@FunctionalInterface
+interface Operacion {
+    int operar(int a, int b);
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Pasando una función como argumento
+        int resultado = realizarOperacion(5, 3, (a, b) -> a + b);
+        System.out.println("Resultado: " + resultado);
+    }
+
+    static int realizarOperacion(int a, int b, Operacion op) {
+        return op.operar(a, b);
+    }
+}
+#+end_src
+
+En este ejemplo, Operacion es una interfaz funcional que define un método operar. En el método realizarOperacion, acepta un objeto de tipo Operacion (que en realidad es una función) como parámetro, y lo utiliza para realizar la operación sobre a y b.
+
+*** Ejemplo basico 02 - Funcion Predefinida de varias lineas
+Sí, es posible llamar a otro método desde dentro de una expresión lambda.
+#+begin_src java
+@FunctionalInterface
+interface Operacion {
+    int operar(int a, int b);
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Pasando una función como argumento
+        int resultado = realizarOperacion(5, 3, (a, b) -> a + b);
+        System.out.println("Resultado Suma: " + resultado);
+        int resultado2 = realizarOperacion(5, 3, (a, b) -> resta(a, b)); // Main::resta
+        System.out.println("Resultado Resta: " + resultado2); // Corregí el texto de impresión
+    }
+
+    static int resta(int a, int b){
+        // varias lineas de codigo...
+        return a - b;
+    }
+
+    static int realizarOperacion(int a, int b, Operacion op) {
+        return op.operar(a, b);
+    }
+}
+#+end_src
+
+*** Referencia a metodo estatico [ Clase::metodo ]
+La sintaxis Main::resta se conoce como "referencia a método estático" (static method reference). Solo funciona con métodos estáticos.
+Si el método resta no fuera estático, tendrías que crear una instancia de la clase Main y entonces podrías usar la sintaxis instancia::metodo (reference to an instance method of an arbitrary object of a particular type), pero esto requiere que el método no sea estático y que se ajuste a la firma de la interfaz funcional.
+#+begin_src java
+@FunctionalInterface
+interface Operacion {
+    int operar(int a, int b);
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int resultado2 = realizarOperacion(5, 3, Main::resta);
+    }
+
+    static int resta(int a, int b){
+        return a - b;
+    }
+
+    static int realizarOperacion(int a, int b, Operacion op) {
+        return op.operar(a, b);
+    }
+}
+#+end_src
+
+*** Referencia metodo instancia [ instancia::metodo ]
+Cuando el metodo a pasar por referencia no es estatico, se usa el nombre de la instancia del objeto en vez del de la clase
+#+begin_src java
+@FunctionalInterface
+interface Operacion {
+    int operar(int a, int b);
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Main instancia = new Main();
+        int resultado2 = realizarOperacion(5, 3, instancia::resta);
+    }
+
+    int resta(int a, int b){
+        return a - b;
+    }
+
+    static int realizarOperacion(int a, int b, Operacion op) {
+        return op.operar(a, b);
+    }
+}
+#+end_src
+
+*** Referencia a método de instancia de un objeto específico [ instancia::metodo ]
+Si tienes una clase que tiene un método que se ajusta a la firma de la interfaz funcional, puedes crear una instancia de esa clase y pasar el método como referencia:
+#+begin_src java
+@FunctionalInterface
+interface Operacion {
+    int operar(int a, int b);
+}
+
+class Calculadora {
+    public int resta(int a, int b) {
+        return a - b;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Calculadora calc = new Calculadora();
+        int resultado2 = realizarOperacion(5, 3, calc::resta);
+    }
+
+    static int realizarOperacion(int a, int b, Operacion op) {
+        return op.operar(a, b);
+    }
+}
+#+end_src
+
+*** Signature Compatibility, Claves de las Referencias y la Interface Funcional
+La clave para que funcione la referencia a método (calc::resta) es que el método resta en la clase Calculadora tenga la misma firma que el método operar en la interfaz Operacion. Esto significa que:
+
+    El método resta debe tener el mismo tipo de retorno que el método operar (en este caso, int).
+    El método resta debe tener el mismo número y tipo de parámetros que el método operar (en este caso, dos parámetros de tipo int).
+
+No importa el nombre del método, solo importa la firma. Esto se conoce como "compatibilidad de firma" (signature compatibility).
+
+En el ejemplo que te mostré, el método resta en la clase Calculadora tiene la misma firma que el método operar en la interfaz Operacion, por lo que podemos usar la referencia a método (calc::resta) para implementar la interfaz.
+#+begin_src java
+@FunctionalInterface
+interface Operacion {
+    int operar(int a, int b);
+}
+
+class Calculadora {
+    public int sumar(int x, int y) {
+        return x + y;
+    }
+
+    public int multiplicar(int a, int b) {
+        return a * b;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Calculadora calc = new Calculadora();
+        int resultadoSuma = realizarOperacion(5, 3, calc::sumar);
+        int resultadoMultiplicacion = realizarOperacion(5, 3, calc::multiplicar);
+    }
+
+    static int realizarOperacion(int a, int b, Operacion op) {
+        return op.operar(a, b);
+    }
+}
+#+end_src
+En este ejemplo, tanto el método sumar como el método multiplicar en la clase Calculadora tienen la misma firma que el método operar en la interfaz Operacion, por lo que podemos usar la referencia a método para implementar la interfaz.
+
+Es importante destacar que la compatibilidad de firma es fundamental para que funcione la referencia a método. Si el método en la clase no tiene la misma firma que el método en la interfaz, no podrás usar la referencia a método.
+
+*** Paso de funcion a constructor
+Sí, también puedes pasar la referencia del método resta o multiplicacion por medio del constructor al instanciar una clase. En este caso, la clase que estás instanciando debe tener un campo que sea una interfaz funcional, y en el constructor, puedes asignar la referencia del método a ese campo.
+
+Aquí hay un ejemplo:
+**** Ejemplo Constructor 01
+#+begin_src java
+@FunctionalInterface
+interface Operacion {
+    int operar(int a, int b);
+}
+
+class Calculadora {
+    public int resta(int a, int b) {
+        return a - b;
+    }
+
+    public int multiplicacion(int a, int b) {
+        return a * b;
+    }
+}
+
+class Procesador {
+    private Operacion operacion;
+
+    public Procesador(Operacion operacion) {
+        this.operacion = operacion;
+    }
+
+    public int procesar(int a, int b) {
+        return operacion.operar(a, b);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Calculadora calc = new Calculadora();
+        Procesador procesadorResta = new Procesador(calc::resta);
+        Procesador procesadorMultiplicacion = new Procesador(calc::multiplicacion);
+
+        int resultadoResta = procesadorResta.procesar(5, 3);
+        int resultadoMultiplicacion = procesadorMultiplicacion.procesar(5, 3);
+
+        System.out.println("Resultado Resta: " + resultadoResta);
+        System.out.println("Resultado Multiplicacion: " + resultadoMultiplicacion);
+    }
+}
+#+end_src
+**** Ejemplo Constructor 02
+En el ejemplo anterior, la clase Procesador tiene un campo operacion que es una interfaz funcional Operacion. En el constructor de Procesador, se asigna la referencia del método resta o multiplicacion a ese campo. Luego, en el método procesar, se llama al método operar del campo operacion, que es la referencia del método que se pasó en el constructor.
+
+De esta manera, puedes crear instancias de Procesador con diferentes operaciones, y cada instancia procesará los datos de acuerdo con la operación que se le asignó.
+
+También puedes hacer que la clase Procesador sea más flexible, permitiendo que se le pase la operación en cualquier momento, no solo en el constructor. Para esto, puedes agregar un método setOperacion que permita cambiar la operación:
+#+begin_src java
+@FunctionalInterface
+interface Operacion {
+    int operar(int a, int b);
+}
+
+class Calculadora {
+    public int resta(int a, int b) {
+        return a - b;
+    }
+
+    public int multiplicacion(int a, int b) {
+        return a * b;
+    }
+}
+
+class Procesador {
+    private Operacion operacion;
+
+    public Procesador() {}
+
+    public void setOperacion(Operacion operacion) {
+        this.operacion = operacion;
+    }
+
+    public int procesar(int a, int b) {
+        return operacion.operar(a, b);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Calculadora calc = new Calculadora();
+        Procesador procesador = new Procesador();
+
+        procesador.setOperacion(cal::resta);
+        int resultadoResta = procesador.procesar(5, 3);
+
+        procesador.setOperacion(cal::multiplicacion);
+        int resultadoMultiplicacion = procesador.procesar(5, 3);
+
+        System.out.println("Resultado Resta: " + resultadoResta);
+        System.out.println("Resultado Multiplicacion: " + resultadoMultiplicacion);
+    }
+}
+#+end_src
+**** Implementacoin de lo aprendido (Video 168 Threads)
+[[file:src/Threads/video168/UsoThreads.java][Link de archivo]]
+La idea era crear un metodo generico para ser ejecutado por la accion actionPerformed
+***** Prototipo Inicial Manual
+#+begin_src java
+private void BD_South() {
+    JPanel lamina_botones = new JPanel();
+
+    @FunctionalInterface
+    interface FuncionDuplicada {
+        void miFuncion();
+    }
+
+    class EventoBoton implements ActionListener {
+        FuncionDuplicada funcion_generica;
+
+        public EventoBoton(FuncionDuplicada miFuncion) {
+            this.funcion_generica = miFuncion;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            funcion_generica.miFuncion();
+        }
+    }
+
+    ponerBoton(lamina_botones, "Start!", new EventoBoton(() -> comienzaJuego()));
+    ponerBoton(lamina_botones, "Exit", new EventoBoton(() -> System.exit(0)));
+
+    add(lamina_botones, BorderLayout.SOUTH);
+}
+#+end_src
+***** Simplificado por Lambdas
+#+begin_src java
+private void BD_South() {
+    JPanel lamina_botones = new JPanel();
+
+    ponerBoton(lamina_botones, "Start!", e -> comienzaJuego());
+    ponerBoton(lamina_botones, "Exit", e -> System.exit(0));
+
+    add(lamina_botones, BorderLayout.SOUTH);
+}
+#+end_src
+
+*** Notas Java 8
+Sí, la compatibilidad de firma y la posibilidad de usar referencias a métodos (::) para implementar interfaces funcionales están disponibles en Java 8.
+
+En específico, las características que te mencioné están incluidas en las siguientes características de Java 8:
+
+    Lambda expressions: Permiten definir bloques de código que se pueden pasar como argumentos a métodos o asignar a variables.
+    Method references (::): Permiten referenciar métodos existentes como si fueran lambda expressions.
+    Functional interfaces: Son interfaces que tienen un solo método abstracto y pueden ser implementadas con lambda expressions o method references.
+    Target typing: Es la capacidad del compilador de Java de inferir el tipo de una lambda expression o method reference basado en el contexto en el que se utiliza.
+
+La sintaxis :: para referenciar métodos se introdujo en Java 8 como parte de la característica de method references. Esta sintaxis se puede utilizar para referenciar métodos estáticos, métodos de instancia y constructores.
+
+*** Conclusiones
+Aunque Java no soporta funciones como objetos de primera clase de la misma manera que algunos otros lenguajes, las expresiones lambda y las interfaces funcionales introducidas en Java 8 ofrecen una forma poderosa y elegante de pasar funciones como argumentos a otras funciones, lo que facilita la programación funcional en Java.
