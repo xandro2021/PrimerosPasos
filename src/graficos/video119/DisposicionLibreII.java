@@ -30,7 +30,7 @@ class Marco extends JFrame {
 class Lamina extends JPanel {
   public Lamina() {
 
-    setLayout(new EnColumnas());
+    setLayout(new EnColumnasAdapter());
 
     JLabel nombre = new JLabel("Nombre:");
     JLabel apellido = new JLabel("Apellido:");
@@ -54,7 +54,7 @@ class Lamina extends JPanel {
   }
 }
 
-class EnColumnas implements LayoutManager {
+class EnColumnasAdapter implements LayoutManager {
 
   private int x; // Posición inicial en x
   private int y; // Posición inicial en y
@@ -77,16 +77,20 @@ class EnColumnas implements LayoutManager {
     for (int i = 0; i < numero_componentes; i++) {
       contador++;
       Component component = micontenedor.getComponent(i);
-      component.setBounds(x - 100, y, 100, 20);
+      int ancho = 100;
+      int alto = 20;
+
+      component.setBounds(x - ancho, y, ancho, alto);
 
       // Incrementar x para el siguiente componente
-      x += 100;
+      x += ancho;
 
       if (contador % 2 == 0) {
         x = ancho_padre / 2;
-        y += 40;
+        y += 2 * alto;
       }
     }
+
   }
 
   @Override

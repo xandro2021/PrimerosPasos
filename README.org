@@ -341,3 +341,62 @@ La sintaxis :: para referenciar métodos se introdujo en Java 8 como parte de la
 
 *** Conclusiones
 Aunque Java no soporta funciones como objetos de primera clase de la misma manera que algunos otros lenguajes, las expresiones lambda y las interfaces funcionales introducidas en Java 8 ofrecen una forma poderosa y elegante de pasar funciones como argumentos a otras funciones, lo que facilita la programación funcional en Java.
+
+* Interfaces Funcionales PreDefinidas por Java
+** Supplier<T>
++ Qué hace: No recibe nada, devuelve un objeto T.
++ Útil para: Crear o proveer objetos sin depender de parámetros externos.
++ Ejemplo:
+#+begin_src java
+Supplier<ListaPedidos> proveedor = ListaPedidos::new;
+ListaPedidos nueva = proveedor.get();
+#+end_src
+** Function<T,R>
++ Qué hace: Recibe un T, devuelve un R.
++ Útil para: Transformar o mapear un objeto en otro.
++ Ejemplo:
+#+begin_src java
+Function<Pedido, Integer> extraerTotal = pedido -> pedido.getTotal();
+int total = extraerTotal.apply(unPedido);
+#+end_src
+** Predicate<T>
++ Qué hace: Recibe un T, devuelve boolean.
++ Útil para: Evaluar condiciones.
++ Ejemplo:
+#+begin_src java
+Predicate<Pedido> esGrande = pedido -> pedido.getTotal() > 10000;
+boolean resultado = esGrande.test(unPedido);
+#+end_src
+** Consumer<T>
++ Qué hace: Recibe un T, no devuelve nada.
++ Útil para: Ejecutar acciones con un objeto (como imprimir, guardar, etc.).
++ Ejemplo:
+#+begin_src java
+Consumer<Pedido> imprimir = pedido -> System.out.println(pedido);
+imprimir.accept(unPedido);
+#+end_src
+** BiFunction<T, U, R>
++ Qué hace: Recibe dos valores (T y U), devuelve un resultado R.
++ Útil para: Cuando necesitas dos entradas para una operación.
++ Ejemplo:
+#+begin_src java
+BiFunction<Pedido, Double, Boolean> mayorQue = (pedido, limite) -> pedido.getTotal() > limite;
+boolean pasa = mayorQue.apply(unPedido, 12000.0);
+#+end_src
+
+* Implementaciones Funcionales en Estructura de Datos propia
+** Lista
+*** ForEach
+#+begin_src java
+/* Dentro de la lista */
+public void forEach(Consumer<T> accion) {
+  Nodo<T> aux = primero;
+  while (aux != null) {
+    accion.accept(aux.getItem());
+    aux = aux.getSiguiente();
+  }
+}
+
+/* Desde el Controlador */
+pedidos.forEach(p -> System.out.println(p.getCliente()));
+#+end_src
