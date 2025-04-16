@@ -400,3 +400,46 @@ public void forEach(Consumer<T> accion) {
 /* Desde el Controlador */
 pedidos.forEach(p -> System.out.println(p.getCliente()));
 #+end_src
+*** Filter
++ Supplier(L) no seria necesario si la estructura fuera completamente generica sin clases que la hereden. Pero dado que tiene clases derivadas, entonces se necesario usar a supplier para poder inyectar esas clases hijas como valor retorno en un metodo de la clase padre
+#+begin_src java
+public <L extends ListaDoble<T>> L filter(Predicate<T> condicion, Supplier<L> supplier) {
+
+  L filtrada = supplier.get();
+
+  Nodo<T> aux = primero;
+
+  while (aux != null) {
+
+    if (condicion.test(aux.getItem())) {
+      filtrada.create(aux.getItem());
+    }
+
+    aux = aux.getSiguiente();
+  }
+
+  return filtrada;
+}
+#+end_src
+*** Ejemplos de uso
+**** Filtrar datos e imprimirlos con forEach
+#+begin_src java
+ListaPedidos pedidos = ...; // ya poblada
+
+ListaPedidos resultado = pedidos
+  .filter(p -> p.getTotal() > 10000, ListaPedidos::new)
+  .filter(p -> p.getDescripcion().contains("Especial"), ListaPedidos::new);
+
+resultado.forEach(p -> System.out.println(p.getDescripcion().toUpperCase()));
+#+end_src
+**** Simular el comportamiento de Map
+#+begin_src java
+// Simulando map: convertir cada Pedido en su descripción en mayúsculas
+List<String> descripciones = new ArrayList<>();
+
+pedidos
+  .filter(p -> p.getTotal() > 10000, ListaPedidos::new)
+  .forEach(p -> descripciones.add(p.getDescripcion().toUpperCase()));
+
+descripciones.forEach(System.out::println);
+#+end_src
