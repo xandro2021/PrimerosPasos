@@ -385,7 +385,8 @@ boolean pasa = mayorQue.apply(unPedido, 12000.0);
 #+end_src
 
 * Implementaciones Funcionales en Estructura de Datos propia
-** Lista
+** ListaDoble V1 (Version extendida por herencia/Pesima idea)
+Crear casos especificos de las estructura de datos por medio de la herencia es pesima idea, mejor usar patron adaptador para crear una version para cada uno de esos casos especificos. Mantiene el generico de una forma mucho mas versatil, reutilizable, simplificados a costa de escribir un poco mas de codigo.
 *** ForEach
 #+begin_src java
 /* Dentro de la lista */
@@ -421,6 +422,23 @@ public <L extends ListaDoble<T>> L filter(Predicate<T> condicion, Supplier<L> su
   return filtrada;
 }
 #+end_src
+*** Map
++ Luego implementamos map, que toma una función y genera una nueva ListaDoble<R>
++ R tiene que implementar la interface FactorComun <R extends FactorComun> dado que ListaDoble lo exige para poder guardar el id (indice/posicion elemento)
+#+begin_src java
+public <R extends FactorComun> ListaDoble<R> map(Function<T, R> transformador) {
+  ListaDoble<R> resultado = new ListaDoble<>();
+
+  Nodo<T> aux = primero;
+
+  while (aux != null) {
+    resultado.create(transformador.apply(aux.getItem()));
+    aux = aux.getSiguiente();
+  }
+
+  return resultado;
+}
+#+end_src
 *** Ejemplos de uso
 **** Filtrar datos e imprimirlos con forEach
 #+begin_src java
@@ -432,7 +450,7 @@ ListaPedidos resultado = pedidos
 
 resultado.forEach(p -> System.out.println(p.getDescripcion().toUpperCase()));
 #+end_src
-**** Simular el comportamiento de Map
+**** Simular el comportamiento de Map con filter y foreach
 #+begin_src java
 // Simulando map: convertir cada Pedido en su descripción en mayúsculas
 List<String> descripciones = new ArrayList<>();
@@ -442,4 +460,45 @@ pedidos
   .forEach(p -> descripciones.add(p.getDescripcion().toUpperCase()));
 
 descripciones.forEach(System.out::println);
+#+end_src
+**** Implementacion alfa de map
+#+begin_src java
+ListaPedidos pedidosFiltrados = pedidos
+  .filter(p -> p.getTotal() > 10000)
+  .map(p -> new Pedido(p.getNombre(), p.getTotal() * 0.9)) // con descuento
+  .filter(p -> p.getTotal() > 12000); // después del descuento
+
+pedidosFiltrados.forEach(p -> System.out.println("Pedido: " + p.getTotal()));
+#+end_src
+**** Implementacion Reduce
+#+begin_src java
+public <U> U reduce(U identidad, BiFunction<U, T, U> acumulador) {
+    U resultado = identidad;
+    Nodo<T> aux = primero;
+
+    while (aux != null) {
+        resultado = acumulador.apply(resultado, aux.getItem());
+        aux = aux.getSiguiente();
+    }
+
+    return resultado;
+}
+#+end_src
+**** Uso reduce
+***** Sumar precios de una lista de Producto
+#+begin_src java
+double total = productos.reduce(0.0, (acum, prod) -> acum + prod.getPrecio());
+#+end_src
+***** Concatenar nombres
+#+begin_src java
+String nombres = productos.reduce("", (acc, p) -> acc + p.getNombre() + ", ");
+#+end_src
+***** Buscar el máximo
+#+begin_src java
+Producto max = productos.reduce(null, (maxAct, p) -> {
+    if (maxAct == null || p.getPrecio() > maxAct.getPrecio()) {
+        return p;
+    }
+    return maxAct;
+});
 #+end_src
