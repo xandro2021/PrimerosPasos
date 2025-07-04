@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,6 +23,34 @@ public class UsoThreads {
     marco.setVisible(true);
 
   }
+}
+
+class PelotaHilos implements Runnable {
+  private Pelota pelota;
+  private Component componente;
+
+  public PelotaHilos(Pelota unaPelota, Component unComponente) {
+    pelota = unaPelota;
+    componente = unComponente;
+  }
+
+  @Override
+  public void run() {
+    System.out.println(Thread.currentThread().isInterrupted());
+    // while(!Thread.interrupted()){
+    while (!Thread.currentThread().isInterrupted()) {
+      pelota.muevePelota(componente.getBounds());
+      componente.paint(componente.getGraphics());
+
+      try {
+        Thread.sleep(4);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+    }
+    System.out.println(Thread.currentThread().isInterrupted());
+  }
+
 }
 
 /* Movimiento de la Pelota */
@@ -80,6 +109,8 @@ class Pelota {
 
 class MarcoRebote extends JFrame {
   private LaminaPelota lamina;
+  private Thread t1, t2, t3;
+  private JButton btn1, btn2, btn3, dtn1, dtn2, dtn3;
 
   public MarcoRebote() {
     setTitle("Video 168 Threads Rebotes");
@@ -95,50 +126,71 @@ class MarcoRebote extends JFrame {
 
   private void BD_South() {
     JPanel lamina_botones = new JPanel();
+    // Boton 1
+    btn1 = new JButton("Hilo 1");
+    btn1.addActionListener(e -> comienzaJuego(e));
+    lamina_botones.add(btn1);
 
-    ponerBoton(lamina_botones, "Start!", e -> comienzaJuego());
-    ponerBoton(lamina_botones, "Exit", e -> System.exit(0));
+    // Boton 2
+    btn2 = new JButton("Hilo 2");
+    btn2.addActionListener(e -> comienzaJuego(e));
+    lamina_botones.add(btn2);
 
-    add(lamina_botones, BorderLayout.SOUTH);
-  }
+    // Boton 3
+    btn3 = new JButton("Hilo 3");
+    btn3.addActionListener(e -> comienzaJuego(e));
+    lamina_botones.add(btn3);
 
-  /* Version Compleja para aprender sobre el paso de funciones como argumento */
-  private void BD_South_unUsed() {
-    JPanel lamina_botones = new JPanel();
+    // Boton dtn 1
+    dtn1 = new JButton("Detener 1");
+    dtn1.addActionListener(e -> detener(e));
+    lamina_botones.add(dtn1);
 
-    @FunctionalInterface
-    interface FuncionGenerica {
-      void miFuncion();
-    }
+    // Boton dtn 2
+    dtn2 = new JButton("Detener 2");
+    dtn2.addActionListener(e -> detener(e));
+    lamina_botones.add(dtn2);
 
-    class EventoBoton implements ActionListener {
-      FuncionGenerica funcion_generica;
-
-      public EventoBoton(FuncionGenerica miFuncion) {
-        this.funcion_generica = miFuncion;
-      }
-
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        funcion_generica.miFuncion();
-      }
-    }
-
-    ponerBoton(lamina_botones, "Start!", new EventoBoton(() -> comienzaJuego()));
-    ponerBoton(lamina_botones, "Exit", new EventoBoton(() -> System.exit(0)));
+    // Boton dtn 3
+    dtn3 = new JButton("Detener 3");
+    dtn3.addActionListener(e -> detener(e));
+    lamina_botones.add(dtn3);
 
     add(lamina_botones, BorderLayout.SOUTH);
   }
 
-  private void ponerBoton(Container lamina_botones, String titulo, ActionListener oyente) {
-    JButton boton = new JButton(titulo);
-    boton.addActionListener(oyente);
-    lamina_botones.add(boton);
-  }
-
-  public void comienzaJuego() {
+  public void comienzaJuego(ActionEvent e) {
     Pelota pelota = new Pelota();
     lamina.add(pelota);
+
+    Runnable r = new PelotaHilos(pelota, lamina);
+
+    if (e.getSource().equals(btn1)) {
+      t1 = new Thread(r);
+      t1.start();
+    }
+    else if (e.getSource().equals(btn2)) {
+      t2 = new Thread(r);
+      t2.start();
+    }
+    else if (e.getSource().equals(btn3)) {
+      t3 = new Thread(r);
+      t3.start();
+    }
+
+  }
+
+  private void detener(ActionEvent e) {
+    System.out.println("DETENTE!");
+    if (e.getSource().equals(dtn1)) {
+      t1.interrupt();
+    }
+    else if (e.getSource().equals(dtn2)) {
+      t2.interrupt();
+    }
+    else if (e.getSource().equals(dtn3)) {
+      t3.interrupt();
+    }
   }
 
 }
