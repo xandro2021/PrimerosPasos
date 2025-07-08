@@ -1,11 +1,10 @@
-import Threads.video173.V2.*;
+import Threads.Aguzman.video255.*;
 // import graficos.video119.DisposicionLibreII;
 
-public class Main
-{
+public class Main {
   public static void main(String[] args) {
 
-    BancoSincronizadoV2.start();
+    EjemploAgendarTareaPeriodica.start();
     // BancoSinSincronizar.start();
     // VentanasEmergentesI.start();
     // DisposicionLibreII.start();
